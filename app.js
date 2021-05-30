@@ -52,9 +52,8 @@ const server = app.listen( app.get( 'port' ), () => {
 ( async () => {
   try {
     await sequelize.authenticate();
-    console.log( "Connection Established with database" );
+    console.log( " 🎉 Database Connection Established 🎉 " );
     await sequelize.sync();
-    console.log( "Database Synced" );
   } catch ( err ) {
     console.log( 'Error connecting', err );
   }
