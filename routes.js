@@ -56,7 +56,8 @@ router.get('/courses/:id', asyncHandler(async (req, res) => {
       });
     if (course === null) {
         const err = new Error('Course does not exist.');
-        throw err.status(404);
+        err.status = 404;
+        throw err;
     } else { res.json(course); }
 }));
 
@@ -107,7 +108,8 @@ router.delete('/courses/:id', authenticateUser, asyncHandler(async (req, res) =>
         const course = await Course.findByPk( req.params.id );
         if ( course === null ) {
           const error = new Error('Course does not exist.' );
-          throw error.status(404);
+          error.status = 404;
+          throw error;
         } else if ( course.userId === user.id ) {
           await course.destroy();
           res.status(204).end();
