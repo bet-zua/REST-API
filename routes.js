@@ -11,10 +11,10 @@ const router = express.Router();
 router.get('/users', authenticateUser, asyncHandler(async (req, res) => {
     const user = req.currentUser;
   
-    res.status(201).json({
-        "First name": user.firstName,
-        "Last name": user.lastName,
-        "Username": user.emailAddress
+    res.status(200).json({
+        "firstName": user.firstName,
+        "lastName": user.lastName,
+        "emailAddress": user.emailAddress
     });
 }));
   
@@ -65,7 +65,6 @@ router.post('/courses', authenticateUser, asyncHandler(async (req, res) => {
     try {
         const user = req.currentUser;
         const course = await Course.create({ ...req.body, userId: user.id });
-        await Course.create(req.body);
         res.status(201).location(`/api/courses/${course.id}`).end();
       } catch (error) {
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
@@ -87,7 +86,8 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async (req, res) => {
           res.status(204).end();
         } else {
           const error = new Error('Course does not exist.');
-          throw error.status(404);
+          error.status = 403;
+          throw error;
         }
       } catch ( error ) {
         if ( error.name === 'SequelizeValidationError' || error.name ===
